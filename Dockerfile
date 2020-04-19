@@ -21,16 +21,16 @@ RUN set -x \
 	&& apt-get purge -y --auto-remove ca-certificates wget
 
 COPY mysql-apt-config_0.8.15-1_all.deb /tmp 
-COPY mysql-router-community_8.0.19-1debian10_amd64.deb /tmp 
-COPY mysql-shell_8.0.19-1debian10_amd64.deb /tmp 
+# COPY mysql-router-community_8.0.19-1debian10_amd64.deb /tmp 
+# COPY mysql-shell_8.0.19-1debian10_amd64.deb /tmp 
 
 RUN apt-get update && \
 	apt-get install -y libcurl4 libpython3.7 && \
 	apt --fix-broken install
 
-RUN dpkg -i /tmp/mysql-router-community_8.0.19-1debian10_amd64.deb && \
-	dpkg -i /tmp/mysql-shell_8.0.19-1debian10_amd64.deb && \
-	rm -Rf /tmp/*
+# RUN dpkg -i /tmp/mysql-router-community_8.0.19-1debian10_amd64.deb && \
+# 	dpkg -i /tmp/mysql-shell_8.0.19-1debian10_amd64.deb && \
+# 	rm -Rf /tmp/*
 
 
 RUN mkdir /docker-entrypoint-initdb.d
@@ -78,7 +78,8 @@ RUN { \
 	&& rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
 	&& chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
 # ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
-	&& chmod 777 /var/run/mysqld
+	&& chmod 777 /var/run/mysqld \
+	&& chmod 777 /usr/bin/mysqlsh
 
 VOLUME /var/lib/mysql
 #VOLUME /etc/mysql
@@ -95,3 +96,7 @@ CMD ["mysqld"]
 # docker network create cluster --subnet=192.168.0.0/16
 # docker run -d --net=cluster --name=node1 --ip=192.168.0.2 -e MYSQL_ROOT_PASSWORD=16scm4 my8innodb mysqld
 # docker run -p 3307:3306 --name node1 -e MYSQL_ROOT_PASSWORD=16scm4 -d my8innodb
+
+# Deploy no Openshift 
+# oc new-app https://github.com/marlonscastro/mysql-node.git --strategy=docker -e MYSQL_ROOT_PASSWORD=16scm4 --name node1
+
