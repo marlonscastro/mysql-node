@@ -86,7 +86,7 @@ RUN	dpkg -i /tmp/mysql-common_8.0.19-1debian10_amd64.deb \
 # ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
 	&& chmod 777 /var/run/mysqld
 
-VOLUME /var/lib/mysql
+# VOLUME /var/lib/mysql
 # Config files
 COPY config/ /etc/mysql/
 COPY docker-entrypoint.sh /usr/local/bin/
