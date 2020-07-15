@@ -86,7 +86,9 @@ RUN	dpkg -i /tmp/mysql-common_8.0.19-1debian10_amd64.deb \
 # ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
 	&& chmod 777 /var/run/mysqld
 
-# VOLUME /var/lib/mysql
+# So comentar se for p Openshift 
+# VOLUME /var/lib/mysql       
+
 # Config files
 COPY config/ /etc/mysql/
 COPY docker-entrypoint.sh /usr/local/bin/
@@ -101,4 +103,4 @@ CMD ["mysqld"]
 # docker run -p 3307:3306 --name node1 -e MYSQL_ROOT_PASSWORD=16scm4 -d mysql8
 
 # Deploy no Openshift 
-# oc new-app https://github.com/marlonscastro/mysql-node.git --strategy=docker -e MYSQL_ROOT_PASSWORD=16scm4 --name node1
+# oc new-app https://github.com/marlonscastro/mysql-node.git --strategy=docker -e MYSQL_ROOT_PASSWORD=16scm4 --name mysql8
